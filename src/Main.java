@@ -7,15 +7,21 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException{
         int processors = Runtime.getRuntime().availableProcessors();
+        double total=0, circle=0;
         Thread[] thread = new Thread[processors];
+        Worker[] worker = new Worker[processors];
         for(int i=0;i<processors;i++){
-            thread[i] = new Thread(new Worker());
+        	worker[i] = new Worker(30); // input time in minutes
+            thread[i] = new Thread(worker[i]);
             thread[i].start();
         }
-        boolean t = true;
-        while (t){
-            Thread.sleep(1000);
-            System.out.println(4.0*(Worker.circle/Worker.total));
+        for(int i=0;i<processors;i++) {
+        	thread[i].join();
         }
+        for(int i=0;i<processors;i++) {
+        	circle += worker[i].getCircle();
+        	total += worker[i].getTotal();
+        }
+        System.out.println(4.0*(circle/total));
     }
 }

@@ -1,33 +1,29 @@
 import java.util.Random;
-import java.util.concurrent.Semaphore;
 public class Worker implements Runnable {
 
-    static double circle=0, total=0;
-    static Semaphore semaphore = new Semaphore(1);
-
+    double circle=0, total=0;
+    long end;
+    public Worker(long n) {
+    	this.end = n*60000;
+    }
 
     public void run() {
-        boolean t = true;
+        long start = System.currentTimeMillis();
+        end += start;
         Random rnd = new Random();
-        while (t){
-            if(Math.pow(rnd.nextDouble(),2.0)+Math.pow(rnd.nextDouble(), 2.0) < 1.0){
-                try {
-                    semaphore.acquire();
-                    circle++;
-                    total++;
-                    semaphore.release();
-                } catch (InterruptedException e){
-
-                }
+        while (System.currentTimeMillis() < end){
+            if(Math.pow(rnd.nextDouble(),2.0)+Math.pow(rnd.nextDouble(), 2.0) <= 1.0){
+            	circle++;
+            	total++;
             } else {
-                try {
-                    semaphore.acquire();
-                    total++;
-                    semaphore.release();
-                } catch (InterruptedException e) {
-
-                }
+            	total++;
             }
         }
+    }
+    public double getCircle() {
+    	return circle;
+    }
+    public double getTotal() {
+    	return total;
     }
 }
