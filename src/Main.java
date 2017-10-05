@@ -1,6 +1,6 @@
 import java.lang.Thread;
 public class Main {
-    // generate points
+    // generate points.
     // calculate if in circle or square
     // store in total and if in circle
     // main is updating pi while threads run
